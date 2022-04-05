@@ -6,9 +6,9 @@ class alphabets:
         self.arr_russ_freq = self.get_dict_val_to_arr(self.dict_russian_freq)
         #for elem in self.dict_russian_freq:
             #self.arr_russ_freq.append(self.dict_russian_freq[elem])
-        self.dict_alph = {}
+        self.dict_ukr_alph = {}
         for elem in self.ukr_alphabet:
-            self.dict_alph[elem] = self.ukr_alphabet.index(elem)
+            self.dict_ukr_alph[elem] = self.ukr_alphabet.index(elem)
         self.dict_rus_alph = {}
         for elem in self.russ_alphabet:
             self.dict_rus_alph[elem] = self.russ_alphabet.index(elem)
@@ -16,27 +16,11 @@ class alphabets:
         self.n = len(self.open_text)
         self.arr_open = []
         for elem in self.open_text:
-            index = self.dict_alph[elem]
+            index = self.dict_ukr_alph[elem]
             self.arr_open.append(index)
 
-    def cypher(self, k):
-        r = len(k)
-        arr_k = []
-        arr_sypher = []
-        for elem in k:
-            index = self.dict_alph[elem]
-            arr_k.append(index)
-        for i in range(self.n):
-            j = i % r
-            index = (self.arr_open[i] + arr_k[j])%33
-            arr_sypher.append(index)
-        string_sypher=''
-        for elem in arr_sypher:
-            letter =self.ukr_alphabet[elem]
-            string_sypher+= letter
-        return (arr_sypher, string_sypher)
 
-    def count_frequency(self, y, alph = 'ukr'):
+    def count_frequency(self, y, alph = 'rus'):
         dict_y_frequency = {}
         if alph == 'rus':
             alph = self.russ_alphabet

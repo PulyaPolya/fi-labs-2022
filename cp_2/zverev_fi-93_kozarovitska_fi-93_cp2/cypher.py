@@ -1,4 +1,4 @@
-from viginer import alphabets
+from alphabets import alphabets
 class Cypher:
     def __init__(self, text, alphabet):
         self.text = text
@@ -105,14 +105,14 @@ class Cypher:
         return orig_text
 
     def get_key_w_M(self):
-        dict_frequency = self.alphabet.count_frequency(text, 'rus')
+        dict_frequency = self.alphabet.count_frequency(self.text, 'rus')
         arr_frequency = []
         for elem in dict_frequency:
             arr_frequency.append(dict_frequency[elem])
         k = []
 
         for y in self.blocks:
-            dict_frequency = v.count_frequency(y, 'rus')
+            dict_frequency = self.alphabet.count_frequency(y, 'rus')
             arr_frequency = []
             for elem in dict_frequency:
                 arr_frequency.append(dict_frequency[elem])
@@ -121,7 +121,7 @@ class Cypher:
             for g in range(32):
                 sum = 0
                 for t in range(32):
-                    sum += list(v.dict_russian_freq.items())[t][1] * arr_frequency[(t + g) % 32]
+                    sum += list(self.alphabet.dict_russian_freq.items())[t][1] * arr_frequency[(t + g) % 32]
                 if sum > M[self.blocks.index(y)]:
                     max_g = g
                     M[self.blocks.index(y)] = sum
@@ -129,18 +129,5 @@ class Cypher:
         return k
 
 
-f = open('cc', encoding = "UTF-8")
-text = f.read()
-f.close()
-v = alphabets()
-c = Cypher(text, v)
-key = 'улановсеребряныепули'
-key_arr = c.code_text(key)
-key_arr1= c.get_key_w_M()
-print(c.decode_text(key_arr1))
-#text_arr =c.code_test(text)
-txt = c.get_orig_text(key_arr, c.coded_text)
-for i in range(len(txt)):
-    print(txt[i], end='')
 
 #print(code_test(text))

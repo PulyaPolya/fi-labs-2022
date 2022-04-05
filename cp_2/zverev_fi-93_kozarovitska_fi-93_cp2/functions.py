@@ -1,4 +1,4 @@
-from viginer import alphabets
+from alphabets import alphabets
 
 
 def get_blocks(text, r):
@@ -110,24 +110,37 @@ def get_orig_text(key_arr, text_arr):
     orig_text = decode_text( orig_arr)
     return orig_text
 
+def cypher(text, k):
+    r = len(k)
+    n = len(text)
+    a =alphabets()
+    arr_k = []
+    arr_sypher = []
+    arr_open = []
+    for elem in text:
+        index = a.dict_rus_alph[elem]
+        arr_open.append(index)
+    for elem in k:
+        index = a.dict_rus_alph[elem]
+        arr_k.append(index)
+    for i in range(n):
+        j = i % r
+        index = (arr_open[i] + arr_k[j])%32
+        arr_sypher.append(index)
+    string_sypher=''
+    for elem in arr_sypher:
+        letter =a.russ_alphabet[elem]
+        string_sypher+= letter
+    return string_sypher
 
-f = open('cc', encoding = "UTF-8")
-text = f.read()
-f.close()
 
-
-#arr = get_key_w_freq(text)
-#key = decode_text(arr)
-#print(key)
-
-key = 'улановсеребряныепули'
-key_arr = code_test(key)
-print(key_arr)
-key_arr1= get_key_w_M(text)
-print(key_arr1)
-text_arr =code_test(text)
-txt = get_orig_text(key_arr, text_arr)
-for i in range(len(txt)):
-    print(txt[i], end='')
-
-print(code_test(text))
+def count_I(y):
+    a = alphabets()
+    n = len(y)
+    dict_y_frequency = a.count_frequency(y)
+    I = 0
+    for elem in dict_y_frequency:
+        N = dict_y_frequency[elem]
+        I += N*(N-1)
+    I /= n*(n-1)
+    return I
