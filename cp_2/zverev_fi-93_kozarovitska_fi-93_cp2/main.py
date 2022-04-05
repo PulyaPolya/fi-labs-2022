@@ -1,5 +1,5 @@
-import functions as f
-from viginer import Viginer
+import functions as func
+from viginer import alphabets
 '''
 alphabet = 'абвгґдеєжзиіїйклмнопрстуфхцчшщьюя '
 dict_alph = {}
@@ -37,10 +37,13 @@ for i in range (n):
 print(arr_sypher)
 
 '''
-v = Viginer('фбвнффрвшішвршіфріщшвіфєвфврйцщшкгитьжфєжмтигршщушкгцамвщьіхцхвзлузауауауауауі')
+v = alphabets('фбвнффрвшішвршіфріщшвіфєвфврйцщшкгитьжфєжмтигршщушкгцамвщьіхцхвзлузауауауауауі')
 k = 'абві'
 res = v.cypher(k)
 arr_sypher = res[0]
 y = res[1]
 v.count_frequency(y)
 print(v.count_I(y))
+f = open('cc', encoding = "UTF-8") ## getting text
+text = f.read()
+f.close()

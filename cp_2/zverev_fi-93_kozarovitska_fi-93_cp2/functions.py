@@ -1,4 +1,4 @@
-from viginer import Viginer
+from viginer import alphabets
 
 
 def get_blocks(text, r):
@@ -27,17 +27,20 @@ def get_D(r, y):
 def get_r(y):
     max = 0
     r = 0
+    arr_d = []
     for i in range (6,30):
         D = get_D(i, y)
         if D > max:
             max =D
+            arr_d.append(D)
             r = i
+    print('d is ', arr_d)
     return r
 
 def get_key_w_M(text):
     r = get_r(text)
     Y = get_blocks(text,r)
-    v = Viginer()
+    v = alphabets()
     dict_frequency = v.count_frequency(text, 'rus')
     #print(dict_frequency)
     arr_frequency = []
@@ -65,7 +68,7 @@ def get_key_w_M(text):
 def get_key_w_freq(text):
     r = get_r(text)
     Y = get_blocks(text, r)
-    v = Viginer()
+    v = alphabets()
     k= []
     print(v.dict_rus_alph)
     for y in Y:
@@ -76,34 +79,31 @@ def get_key_w_freq(text):
             if dict_freq[elem] > max:
                 max = dict_freq[elem]
                 letter_o = elem
-        k_i = (v.russian_alphabet.index(letter_o)-8)%32
+        k_i = (v.russ_alphabet.index(letter_o) - 8) % 32
         k.append(k_i)
     return (k)
 
 def code_test(text):
-    v = Viginer()
+    v = alphabets()
     print(v.dict_rus_alph)
     arr = []
     for elem in text:
-        ind = v.russian_alphabet.index(elem)
+        ind = v.russ_alphabet.index(elem)
         arr.append(ind)
     return arr
 
 def decode_text(arr):
-    v =  Viginer()
+    v =  alphabets()
 
     result = ''
     for elem in arr:
-        result+=v.russian_alphabet[elem]
+        result+=v.russ_alphabet[elem]
     return result
 
 def get_orig_text(key_arr, text_arr):
     r = len(key_arr)
     orig_arr = []
     for i in range (len(text_arr)):
-        if i == 20:
-            a = 1
-            pass
         ind = i%r
         new_elem = (text_arr[i]- key_arr[ind])%32
         orig_arr.append(new_elem)
@@ -125,9 +125,9 @@ key_arr = code_test(key)
 print(key_arr)
 key_arr1= get_key_w_M(text)
 print(key_arr1)
-#text_arr =code_test(text)
-#txt = get_orig_text(key_arr, text_arr)
-#for i in range(len(txt)):
-    #print(txt[i], end='')
+text_arr =code_test(text)
+txt = get_orig_text(key_arr, text_arr)
+for i in range(len(txt)):
+    print(txt[i], end='')
 
-#print(code_test(text))
+print(code_test(text))
