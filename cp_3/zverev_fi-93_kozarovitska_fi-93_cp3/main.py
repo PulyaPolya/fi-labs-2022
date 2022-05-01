@@ -1,29 +1,29 @@
 import lab_1 as l
 import functions as func
-alpWSpace = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
-probab_dict = dict()
-f = open('text', encoding = "UTF-8")
-text = f.read()
-count = len(text)
-for i in alpWSpace:
-    for j in alpWSpace:
+from sypher import Sypher
+#alpWSpace = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
+probab_dict = {}
+syph = Sypher()
+
+count = len(syph.text)
+for i in syph.alphabet:
+    for j in syph.alphabet:
         word = i + j
         probab_dict[word] = 0
 for j in range(0, count-1, 1):
-    if text[j] + text[j + 1] in probab_dict:
-        probab_dict[text[j] + text[j + 1]] += 1
+    if syph.text[j] + syph.text[j + 1] in probab_dict:
+        probab_dict[syph.text[j] + syph.text[j + 1]] += 1
 for i in probab_dict:
    probab_dict[i] = probab_dict[i] / count
 
-#print(BiDick)
 
-BiDick = l.get_bidick()
+#BiDick = l.get_bidick()
 #print(BiDick)
-keys = list(BiDick.keys())
-val =[]
+#keys = list(BiDick.keys())
+#val =[]
 
-for k in keys:
-    val.append(BiDick[k])
+#for k in keys:
+    #val.append(BiDick[k])
 '''
 m = max(val)
 ind = val.index(m)
@@ -31,19 +31,19 @@ print(keys[ind])
 print(BiDick[keys[ind]])
 '''
 
-max_bi = []
 
-dict_letters = {}
+
 #arr_bi = l.get_max(5, BiDick)
 arr_syph = l.get_max(5, probab_dict)
 arr_bi_true = ['ст', 'но', 'то', 'на', 'ен']
 print(arr_syph)
-#print(l.get_monodick())
+
 i = 0
 j = 0
+arr_code = l.code()
 def solve():
     for i in range(len(arr_bi_true)):
-        m = len(alpWSpace)
+        m = len(syph.alphabet)
         mod  = m**2
         for j in range(len(arr_bi_true)):
             x1 = l.code_bigramm(arr_bi_true[i])
@@ -55,5 +55,26 @@ def solve():
                         y2 = l.code_bigramm(arr_syph[t])
 
                         a = func.solve_linear_mod(a = y1 - y2, b= x1 - x2, n = mod )
-                        b = (y1 - a * x1) % mod
+                        if a!= ':(':
+                            if isinstance(a, list):
+                                for el in a:
+                                    b = (y1 - el * x1) % mod
+                                    arr_numb = l.decode(arr_code, el, b, mod)
+                                    try:
+                                        txt = l.decode_text(arr_numb, syph.mod)
+                                    except:
+                                        break
+                                    real = l.check_if_real(txt)
+                                    if real != 'no':
+                                        print(i, j, k, t, txt)
+                            else:
+                                b = (y1 - a * x1) % mod
+                                arr_numb = l.decode(arr_code, a, b, mod)
+                                if arr_numb !=':(':
+                                    txt = l.decode_text(arr_numb, syph.mod)
+                                    real = l.check_if_real(txt)
+                                    if real != 'no':
+                                        print(i, j, k, t, txt)
 
+
+solve()

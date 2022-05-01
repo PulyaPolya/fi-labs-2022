@@ -34,12 +34,13 @@ def get_minus(a , n):
         a_minus = s
         return a_minus%n
     else:
-        raise Exception
+        return ':('
 
 def solve_linear_mod(a,b, n):
     a = a %n
     b = b %n
     d = math.gcd(a,n)
+
     if d == 1:
         r, s, t = evklid(a, n)
         a_minus = s
@@ -58,7 +59,7 @@ def solve_linear_mod(a,b, n):
             arr_x = []
             for i in range(d):
                 x += n0
-                arr_x.append(x%n)
+                arr_x.append(int(x%n))
             return arr_x
 
 #sol = solve_linear_mod(111,75, 321)
