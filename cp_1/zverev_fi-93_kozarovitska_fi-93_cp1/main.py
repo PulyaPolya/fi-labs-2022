@@ -44,8 +44,8 @@ def count_H(Dick):
     return H
 
 #print(MonoDick)
-#print( BiDick)
-print(count_H(MonoDick))
-print(count_H(BiDick))
+print( BiDick)
+#print(count_H(MonoDick))
+#print(count_H(BiDick))
 #print(count_H(BiDick,2))
 f.close()
