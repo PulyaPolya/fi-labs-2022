@@ -62,6 +62,4 @@ def solve_linear_mod(a,b, n):
                 arr_x.append(int(x%n))
             return arr_x
 
-#sol = solve_linear_mod(111,75, 321)
-#print(sol)
 

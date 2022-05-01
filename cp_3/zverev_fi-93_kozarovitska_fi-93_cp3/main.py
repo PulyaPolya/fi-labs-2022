@@ -1,7 +1,6 @@
 import lab_1 as l
 import functions as func
 from sypher import Sypher
-#alpWSpace = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
 probab_dict = {}
 syph = Sypher()
 
@@ -17,23 +16,6 @@ for i in probab_dict:
    probab_dict[i] = probab_dict[i] / count
 
 
-#BiDick = l.get_bidick()
-#print(BiDick)
-#keys = list(BiDick.keys())
-#val =[]
-
-#for k in keys:
-    #val.append(BiDick[k])
-'''
-m = max(val)
-ind = val.index(m)
-print(keys[ind])
-print(BiDick[keys[ind]])
-'''
-
-
-
-#arr_bi = l.get_max(5, BiDick)
 arr_syph = l.get_max(5, probab_dict)
 arr_bi_true = ['ст', 'но', 'то', 'на', 'ен']
 print(arr_syph)
@@ -67,6 +49,7 @@ def solve():
                                     real = l.check_if_real(txt)
                                     if real != 'no':
                                         print(i, j, k, t, txt)
+                                        print(el, b)
                             else:
                                 b = (y1 - a * x1) % mod
                                 arr_numb = l.decode(arr_code, a, b, mod)
@@ -75,6 +58,7 @@ def solve():
                                     real = l.check_if_real(txt)
                                     if real != 'no':
                                         print(i, j, k, t, txt)
+                                        print(a, b)
 
 
 solve()
