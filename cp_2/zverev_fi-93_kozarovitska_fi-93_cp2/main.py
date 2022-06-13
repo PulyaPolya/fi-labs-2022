@@ -1,6 +1,7 @@
 import functions as func
 from alphabets import alphabets
 from cypher import Cypher
+
 '''
 alphabet = 'абвгґдеєжзиіїйклмнопрстуфхцчшщьюя '
 dict_alph = {}
@@ -74,6 +75,7 @@ r_6 = "примат"
 r_10 = "мандаринка"
 r_18 = "машадождаласькогда"
 print('\n')
+'''
 cyphered_2 = func.cypher(text, r_2)
 cyphered_18 = func.cypher(text, r_18)
 cyphered_3 = func.cypher(text, r_3)
@@ -87,3 +89,8 @@ print(func.count_I(cyphered_6))
 print(func.count_I(cyphered_10))
 print(func.count_I(cyphered_18))
 print((cyphered_18))
+'''
+res =c.get_key_w_M()
+print(func.decode_text(res))
+
+c.print_table()
