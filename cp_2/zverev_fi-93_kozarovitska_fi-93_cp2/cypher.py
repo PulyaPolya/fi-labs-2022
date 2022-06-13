@@ -1,4 +1,7 @@
 from alphabets import alphabets
+from matplotlib import pyplot as plt
+import numpy as np
+import pandas as pd
 class Cypher:
     def __init__(self, text, alphabet):
         self.text = text
@@ -32,13 +35,17 @@ class Cypher:
         max = 0
         r = 0
         arr_d = []
-        for i in range(6, 30):
+        dict = {}
+        for i in range(6, 31):
             D = self.get_D(i)
+            dict[i] = D
             if D > max:
                 max = D
                 arr_d.append(D)
                 r = i
+
         print('d is ', arr_d)
+        print(dict)
         return r
 
     def get_key_w_M(self):
@@ -110,23 +117,56 @@ class Cypher:
         for elem in dict_frequency:
             arr_frequency.append(dict_frequency[elem])
         k = []
-
+        dict_block = {}
+        self.table = []
         for y in self.blocks:
+            arr = []
+            dict_block[self.blocks.index(y)] = []
             dict_frequency = self.alphabet.count_frequency(y, 'rus')
             arr_frequency = []
             for elem in dict_frequency:
                 arr_frequency.append(dict_frequency[elem])
             M = [0] * len(self.blocks)
             max_g = 0
+            dict_sum  ={}
             for g in range(32):
+                dict_sum[g] = []
                 sum = 0
                 for t in range(32):
                     sum += list(self.alphabet.dict_russian_freq.items())[t][1] * arr_frequency[(t + g) % 32]
+
                 if sum > M[self.blocks.index(y)]:
                     max_g = g
                     M[self.blocks.index(y)] = sum
+                dict_block[self.blocks.index(y)].append(sum)
+                arr.append(sum)
+            self.table.append(arr)
             k.append(max_g)
+        print(k)
         return k
+
+
+    def print_table(self):
+        '''
+        pd.set_option('display.max_rows', None)
+        pd.set_option('display.max_columns', None)
+        pd.set_option('display.width', None)
+        pd.set_option('display.max_colwidth', -1)
+        '''
+        columns = []
+        index = []
+        for i in range(len(self.blocks)):
+            elem = 'Y' + str(i)
+            index.append(elem)
+        for i in range(32):
+            el= 'g = ' + str(i)
+            columns.append(el)
+
+        df = pd.DataFrame(self.table, index,columns)
+        df.to_csv('myfile.csv')
+        #print(df)
+
+
 
 
 
