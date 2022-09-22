@@ -1,3 +1,5 @@
+import time
+
 def add_one(vect):
     sum = 0
     for elem in vect:
@@ -24,8 +26,12 @@ def add_one(vect):
             vect[i] = 1
         return vect
 
-initial_arr = [0]*10
-res = add_one(initial_arr)
-while res != 'end':
-    res = add_one(initial_arr)
-    print(''.join(str(e) for e in res))
+# initial_arr = [0]*30
+# start = time.time()
+# res = add_one(initial_arr)
+# while res != 'end':
+#     res = add_one(initial_arr)
+#     print(''.join(str(e) for e in res))
+#
+# end = time.time()
+# print('Execution time:', time.strftime("%H:%M:%S", time.gmtime(end-start)))

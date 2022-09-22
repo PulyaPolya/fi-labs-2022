@@ -1,4 +1,6 @@
 import vectors as v
+from scipy.stats import norm
+import math
 class Geffe :
     def __init__(self, n1, n2, n3, z):
         self.z = ''
@@ -72,5 +74,125 @@ class Geffe :
             if sum <= self.C:
                 arr_Li_candidates.append(vector)
             vector = v.add_one(vector)
+
+class Generator:
+    def __init__(self, ni):
+        self.ni = ni
+        self.arr = []
+    def set_key(self, key):
+        self.key = key
+        self.arr = []
+
+    def get_n_C(self):
+        N, C =count_N_C(self.ni)
+        self.N = N
+        self.C = C
+
+
+class L1(Generator):
+    # def __init__(self, ni):
+    #     #self.key = key
+    #     self.ni = ni
+    #     #self.arr = key.copy()
+    #
+    # def get_arr(self, arr):
+    #     self.arr = arr
+
+    def generate(self):
+        new_x = self.key[-30]^self.key[-29]^self.key[-26]^self.key[-24]
+        #new_x = self.key[-1]^self.key[-2]
+        self.key.append(new_x)
+        self.arr.append(self.key[0])
+        self.key.pop(0)
+
+    # def get_n_C(self):
+    #     N, C =count_N_C(self.n1)
+    #     self.N = N
+    #     self.C = C
+
+class L2 (Generator):
+    # def __init__(self, ni):
+    #     #self.key = key
+    #     self.ni = ni
+    #     #self.arr = key.copy()
+
+    def generate(self):
+        new_x = self.key[-31]^self.key[-28]
+        self.key.append(new_x)
+        self.arr.append(self.key[0])
+        self.key.pop(0)
+
+    # def get_arr(self, arr):
+    #     self.arr = arr
+    # def get_n_C(self):
+    #     N, C =count_N_C(self.n2)
+    #     self.N = N
+    #     self.C = C
+        
+class L3(Generator):
+    # def __init__(self, ni):
+    #     #self.key = key
+    #     self.ni = ni
+    #     # self.arr = key.copy()
+
+    def generate(self):
+        new_x = self.key[-32]^self.key[-31]^self.key[-30]^self.key[-29]^self.key[-27]^self.key[-25]
+        self.key.append(new_x)
+        self.arr.append(self.key[0])
+        self.key.pop(0)
+    # def get_n_C(self):
+    #     N, C =count_N_C(self.n3)
+    #     self.N = N
+    #     self.C = C
+def count_F( x, y, s):
+    return (s and x) ^ (1 ^ s)^y
+
+def get_betta(ni):
+    return 1 / (2 ** ni)
+def count_N_C(ni, p1=0.25, p2=0.5, alpha=0.01):
+    betta = get_betta(ni)
+    t_betta = norm.ppf(1 - betta, loc=0, scale=1)
+    t_alpha = norm.ppf(1 - alpha, loc=0, scale=1)
+    N = t_betta * math.sqrt(p2 * (1 - p2)) + t_alpha * math.sqrt(p1 * (1 - p1))
+    N /= (p2 - p1)
+    N = N ** 2
+    C = N * p1 + t_alpha * math.sqrt(N * p1 * (1 - p1))
+    return N, C
+
+def count_R_L1(generator, z):
+    z_arr = z[:int(generator.N)+1]
+    N_star = len(z_arr)
+    arr_Li_candidates =[]
+    vector = [0]*generator.ni
+    generator.set_key(vector)
+    r= 0
+    while vector != 'end':
+        R = 0
+        for n in range(N_star):
+            generator.generate()
+        for j in range(N_star):
+            R += (z_arr[j]^generator.arr[j])
+        if R < generator.C:
+            arr_Li_candidates.append(vector)
+            print(vector)
+        vector = v.add_one(vector)
+        generator.set_key(vector)
+        r+= 1
+    return arr_Li_candidates
+
+f = open('z')
+arr_z_t = list(f)
+z = [int(x) for x in arr_z_t[0]]
+alpha = 0.01
+l1 = L1(30)
+l2 = L2(31)
+l3 = L3(32)
+l1.get_n_C()
+arr_cand_l1 = count_R_L1(l1, z)
+print(arr_cand_l1)
+
+
+
+
 
 
