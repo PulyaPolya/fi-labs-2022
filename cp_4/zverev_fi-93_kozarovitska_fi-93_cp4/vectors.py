@@ -26,12 +26,10 @@ def add_one(vect):
             vect[i] = 1
         return vect
 
-# initial_arr = [0]*30
-# start = time.time()
-# res = add_one(initial_arr)
-# while res != 'end':
-#     res = add_one(initial_arr)
-#     print(''.join(str(e) for e in res))
-#
-# end = time.time()
-# print('Execution time:', time.strftime("%H:%M:%S", time.gmtime(end-start)))
+def count_F( s, x, y):
+    return (s and x) ^ ((1 ^ s)and y)
+# vector = [0]*3
+# for i in range(8):
+#     print(vector)
+#     print(count_F(vector[0], vector[1], vector[2]))
+#     vector = add_one(vector)

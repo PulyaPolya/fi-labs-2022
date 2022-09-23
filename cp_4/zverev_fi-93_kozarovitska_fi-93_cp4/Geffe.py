@@ -207,8 +207,8 @@ class L3_simplified(Generator):
 #     #     N, C =count_N_C(self.n3)
 #     #     self.N = N
 #     #     self.C = C
-def count_F( x, y, s):
-    return (s and x) ^ (1 ^ s)and y
+def count_F( s, x, y):
+    return (s and x) ^ ((1 ^ s)and y)
 
 def get_betta(ni):
     return 1 / (2 ** (ni+1))
@@ -256,16 +256,12 @@ def count_R_L(generator, z, numb_of_generator):
     if R < generator.C:
         good_generator = create_good_generator(generator, numb_of_generator)
         arr_Li_candidates.append(good_generator)
-    if numb_of_generator == 1:
-        C= generator.C
-    else:
-        C = 91
-    for i in range(5000):
+    for i in range(2**generator.ni-1):
         generator.generate_not_first()
         R = count_R(z_arr, generator.arr, N_star)
         # for j in range(N_star):
         #     R += (z_arr[j] ^ generator.arr[j])
-        if R < C:
+        if R < generator.C:
             # if numb_of_generator == 1:
             #     good_generator = L1_simplified(generator.ni)
             # elif numb_of_generator == 2:
@@ -291,18 +287,21 @@ def check_z(generator1, generator2, generator3,z, N_star):
     for i in range(N_star):
         zi = count_F(generator1.arr[i], generator2.arr[i], generator3.arr[i])
         supposed_z.append(zi)
-    if supposed_z == z[:N_star]:
+    if supposed_z == z[:N_star]: #
         print('!!!!!!!!!!!')
-    for i in range(N_star, len(z)):
-        generator1.generate()
-        generator2.generate()
-        generator3.generate()
-        zi = count_F(generator1.new_x, generator2.new_x, generator3.new_x)
-        if zi !=  z[i]:
-            luck = False
-            break
-    if luck == True:
-        print(generator1.initial_key, generator2.initial_key, generator3.initial_key)
+        right_bits = N_star
+        for i in range(N_star, len(z)):
+            generator1.generate()
+            generator2.generate()
+            generator3.generate()
+            zi = count_F(generator1.new_x, generator2.new_x, generator3.new_x)
+            if zi !=  z[i]:
+                luck = False
+                break
+            else:
+                right_bits += 1
+        if luck == True:
+            print(generator1.initial_key, generator2.initial_key, generator3.initial_key)
     return luck
 
 def find_L3(generator, arr_cand_l1, arr_cand_l2, z):
@@ -313,20 +312,20 @@ def find_L3(generator, arr_cand_l1, arr_cand_l2, z):
     generator.key = vector
     generator.generate_first(N_star)
     for i in range(2 ** generator.ni - 1):
-        for genl1 in arr_cand_l1:
-            for genl2 in arr_cand_l2:
+        for x in arr_cand_l1:
+            for y in arr_cand_l2:
                 fits = True
                 for i in range(N_star):
-                    if genl2.arr[i] != genl1.arr[i]:
-                        if z[i] == genl1.arr[i] and generator.arr[i]  == 1:
+                    if x.arr[i] != y.arr[i]:
+                        if z[i] == x.arr[i] and generator.arr[i]  == 1:
                             fits = True
-                        elif z[i] == genl2.arr[i] and generator.arr[i] == 0:
+                        elif z[i] == y.arr[i] and generator.arr[i] == 0:
                             fits = True
                         else:
-                            fitrs = False
+                            fits = False
                             break
-                if fits != False:
-                    luck = check_z(genl1,genl2, generator, z, N_star)
+                if fits == False:
+                    luck = check_z(x,y, generator, z, N_star)
 
 f = open('z')
 arr_z_t = list(f)
@@ -338,7 +337,6 @@ arr_cand_l1 = count_R_L(l1, z, 1)
 l2 = L2_simplified(26)
 l2.get_n_C()
 arr_cand_l2 = count_R_L(l2, z, 2)
-arr_cand_l2.append(arr_cand_l2[0])
 l3 = L3_simplified(27)
 find_L3(l3, arr_cand_l1, arr_cand_l2, z)
 
