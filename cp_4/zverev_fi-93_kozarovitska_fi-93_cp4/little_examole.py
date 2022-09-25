@@ -62,7 +62,6 @@ class Generator:
         self.initial_key = -1
         self.change_key = change_key
         self.R = 0
-        self.reduce_arr = True
     def set_key(self, key):
         self.key = key
         self.arr = []
@@ -92,8 +91,7 @@ class Generator:
         self.key = self.next_end
         #self.initial_key = self.key
         self.generate()
-        if self.reduce_arr:
-            self.arr.pop(0)
+        self.arr.pop(0)
         self.next_end = self.key
         if self.change_key == True:
             self.initial_key_list.append(self.key.copy())
@@ -177,7 +175,6 @@ def create_good_generator(generator, numb_of_generator):
     good_generator.key = generator.key.copy()
     good_generator.arr = generator.arr.copy()
     good_generator.next_end = generator.next_end
-    good_generator.initial_key_list = generator.initial_key_list.copy()
     good_generator.change_key = False
     return good_generator
 
@@ -239,39 +236,32 @@ def check_z(generator1, generator2, generator3, z, N_star):
     supposed_z = []
     key1, key2, key3= generator1.initial_key.copy(), generator2.initial_key.copy(), generator3.initial_key.copy()
     luck = False
+    init_key = generator3.initial_key
     for i in range(N_star):
         zi = count_F(generator3.arr[i],generator1.arr[i], generator2.arr[i])
         supposed_z.append(zi)
     if supposed_z == z[:N_star]:  #
         print('!!!!!!!!!!!')
         right_bits = N_star
-        for i in range(len(generator2.arr) - len(generator1.arr)):
-            generator1.generate_not_first()
-            generator3.generate_not_first()
-        for i in range(len(generator2.arr) - len(generator1.arr)):
-            generator1.reduce_arr = False
-            generator3.reduce_arr = False
-            generator1.generate_not_first()
-            generator3.generate_not_first()
-            
-        # generator1.set_key(generator1.initial_key)
-        # generator2.set_key(generator2.initial_key)
-        # generator3.set_key(init_key)
+        # for i in range(len(generator2.arr) - len(generator1.arr)):
+        #     generator1.generate_not_first()
+        #     generator3.generate_not_first()
+        generator1.set_key(generator1.initial_key)
+        generator2.set_key(generator2.initial_key)
+        generator3.set_key(init_key)
         # for i in range(len(z)):
         #     generator3.change_key = True
         #     generator2.change_key = True
         #     generator1.change_key = True
 
-        # generator1.generate_first(len(z))
-        # generator2.generate_first(len(z))
-        # generator3.generate_first(len(z))
+        generator1.generate_first(len(z))
+        generator2.generate_first(len(z))
+        generator3.generate_first(len(z))
         cand_z = []
-        generator1.reduce_arr = True
-        generator3.reduce_arr = True
-        for i in range(len(generator2.arr)-1,len(z)):
-            generator1.generate_not_first()
-            generator2.generate_not_first()
-            generator3.generate_not_first()
+        for i in range(len(z)):
+        #     generator1.generate_not_first()
+        #     generator2.generate_not_first()
+        #     generator3.generate_not_first()
             zi = count_F(generator3.arr[i], generator1.arr[i], generator2.arr[i])
             cand_z.append(zi)
             if zi != z[i]:
