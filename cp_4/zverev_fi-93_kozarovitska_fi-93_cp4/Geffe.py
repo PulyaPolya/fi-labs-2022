@@ -83,6 +83,7 @@ class Generator:
         self.initial_key_list = []
         self.initial_key = -1
         self.change_key = change_key
+        self.R = 0
     def set_key(self, key):
         self.key = key
         self.arr = []
@@ -249,36 +250,49 @@ def count_R_L(generator, z, numb_of_generator):
     vector.append(1)
     generator.key = vector
     generator.generate_first(N_star)
+    dict_of_freq = {}
     R = count_R(z_arr, generator.arr, N_star)
     R_min = 1000
+    if numb_of_generator == 1:
+        C = generator.C
+    else:
+        C = generator.C
     # for j in range(N_star):
     #     R += (z_arr[j] ^ generator.arr[j])
-    if R < generator.C:
+    if R < C:
+        if R in dict_of_freq:
+            dict_of_freq[R] += 1
+        else:
+            dict_of_freq[R] = 1
+        print(dict_of_freq)
         good_generator = create_good_generator(generator, numb_of_generator)
+        good_generator.R = R
         arr_Li_candidates.append(good_generator)
+        # print(generator.initial_key, good_generator.R)
     for i in range(2**generator.ni-1):
         generator.generate_not_first()
         R = count_R(z_arr, generator.arr, N_star)
         # for j in range(N_star):
         #     R += (z_arr[j] ^ generator.arr[j])
-        if R < generator.C:
-            # if numb_of_generator == 1:
-            #     good_generator = L1_simplified(generator.ni)
-            # elif numb_of_generator == 2:
-            #     good_generator = L2_simplified(generator.ni)
-            # else:
-            #     good_generator = L3_simplified(generator.ni)
-            # good_generator.set_key(generator.initial_key)
-            # good_generator.arr = generator.arr.copy()
+        if R < C:
+
+            if R in dict_of_freq:
+                dict_of_freq[R] += 1
+            else:
+                dict_of_freq[R] = 1
+            print(dict_of_freq)
             good_generator = create_good_generator(generator, numb_of_generator)
+            good_generator.R = R
             arr_Li_candidates.append(good_generator)
+            #print(generator.initial_key, good_generator.R)
             # good_generator.print_gen()
         if R < R_min:
             R_min = R
-            print(R_min)
+            #print(R_min)
         #     end = time.time()
         #     print('Execution time:', time.strftime("%H:%M:%S", time.gmtime(end-start)))
         #     start = time.time()
+
     return arr_Li_candidates
 
 def check_z(generator1, generator2, generator3,z, N_star):
@@ -327,18 +341,65 @@ def find_L3(generator, arr_cand_l1, arr_cand_l2, z):
                 if fits == False:
                     luck = check_z(x,y, generator, z, N_star)
 
+
+def create_gate_s(x, y,z, N_star):
+    dict_ind = {}
+    for i in range(N_star):
+        if x.arr[i] != y.arr[i]:
+            if z[i] == x.arr[i]:
+                dict_ind[i] = 1
+            elif z[i] == y.arr[i]:
+                dict_ind[i] = 0
+    return dict_ind
+
+def check_gate(dict_ind, z_candidate,N_star):
+    for i in range(N_star):
+        if i in dict_ind:
+            if z_candidate[i] != dict_ind[i]:
+                return ':('
+    return( ':)')
+
+
+
+def find_L3_v2(generator, arr_cand_l1, arr_cand_l2, z):
+    N_star = min(len(arr_cand_l1[0].arr), len(arr_cand_l2[0].arr))
+    z_arr = z[:N_star]
+
+    for x in arr_cand_l1:
+        for y in arr_cand_l2:
+            dict_ind = create_gate_s(x, y,z_arr, N_star)
+            vector = [0] * (generator.ni - 1)
+            vector.append(1)
+            generator.key = vector
+            generator.generate_first(N_star)
+            for i in range(2 ** generator.ni - 1):
+                generator.generate_not_first()
+                result = check_gate(dict_ind, generator.arr, N_star)
+                if result == ':)':
+                    check_z(x, y, generator,z, N_star)
+                    
+
+
+
+
 f = open('z')
 arr_z_t = list(f)
 z = [int(x) for x in arr_z_t[0]]
 alpha = 0.01
-l1 = L1_simplified(25)
-l1.get_n_C()
-arr_cand_l1 = count_R_L(l1, z, 1)
+# start = time.time()
+# l1 = L1_simplified(25)
+# l1.get_n_C()
+# arr_cand_l1 = count_R_L(l1, z, 1)
+# end =  time.time()
+# print('Execution time:', time.strftime("%H:%M:%S", time.gmtime(end-start)))
+start = time.time()
 l2 = L2_simplified(26)
 l2.get_n_C()
 arr_cand_l2 = count_R_L(l2, z, 2)
-l3 = L3_simplified(27)
-find_L3(l3, arr_cand_l1, arr_cand_l2, z)
+end =  time.time()
+print('Execution time:', time.strftime("%H:%M:%S", time.gmtime(end-start)))
+# l3 = L3_simplified(27)
+# find_L3(l3, arr_cand_l1, arr_cand_l2, z)
 
 # key = [1,2,3,4]
 # arr_gen  =[]
