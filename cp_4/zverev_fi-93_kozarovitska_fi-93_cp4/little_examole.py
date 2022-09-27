@@ -237,41 +237,39 @@ def check_z(generator1, generator2, generator3, z, N_star):
     key1, key2, key3= generator1.initial_key.copy(), generator2.initial_key.copy(), generator3.initial_key.copy()
     luck = False
     init_key = generator3.initial_key
-    for i in range(N_star):
-        zi = count_F(generator3.arr[i],generator1.arr[i], generator2.arr[i])
-        supposed_z.append(zi)
-    if supposed_z == z[:N_star]:  #
-        print('!!!!!!!!!!!')
-        right_bits = N_star
-        # for i in range(len(generator2.arr) - len(generator1.arr)):
-        #     generator1.generate_not_first()
-        #     generator3.generate_not_first()
-        generator1.set_key(generator1.initial_key)
-        generator2.set_key(generator2.initial_key)
-        generator3.set_key(init_key)
-        # for i in range(len(z)):
-        #     generator3.change_key = True
-        #     generator2.change_key = True
-        #     generator1.change_key = True
+    # for i in range(N_star):
+    #     zi = count_F(generator3.arr[i],generator1.arr[i], generator2.arr[i])
+    #     supposed_z.append(zi)
+    # if supposed_z == z[:N_star]:  #
+    #     print('!!!!!!!!!!!')
+    #     right_bits = N_star
 
-        generator1.generate_first(len(z))
-        generator2.generate_first(len(z))
-        generator3.generate_first(len(z))
-        cand_z = []
-        for i in range(len(z)):
-        #     generator1.generate_not_first()
-        #     generator2.generate_not_first()
-        #     generator3.generate_not_first()
-            zi = count_F(generator3.arr[i], generator1.arr[i], generator2.arr[i])
-            cand_z.append(zi)
-            if zi != z[i]:
-                luck = False
-                break
-            else:
-                right_bits += 1
-                luck = True
-        if luck == True:
-            print(key1, key2, key3)
+    generator1.set_key(generator1.initial_key)
+    generator2.set_key(generator2.initial_key)
+    generator3.set_key(init_key)
+    # for i in range(len(z)):
+    #     generator3.change_key = True
+    #     generator2.change_key = True
+    #     generator1.change_key = True
+
+    generator1.generate_first(len(z))
+    generator2.generate_first(len(z))
+    generator3.generate_first(len(z))
+    cand_z = []
+    for i in range(len(z)):
+    #     generator1.generate_not_first()
+    #     generator2.generate_not_first()
+    #     generator3.generate_not_first()
+        zi = count_F(generator3.arr[i], generator1.arr[i], generator2.arr[i])
+        cand_z.append(zi)
+        if zi != z[i]:
+            luck = False
+            break
+        else:
+            #right_bits += 1
+            luck = True
+    if luck == True:
+        print(key1, key2, key3)
             #print(generator1.initial_key, generator2.initial_key, generator3.initial_key)
     return luck
 
@@ -320,7 +318,8 @@ def find_L3_v2(generator, arr_cand_l1, arr_cand_l2, z):
 #
 #z = [0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1]
 
-z = [1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]
+#z = [1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]
+z = [1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0]
 l1 = L1_simplified(3)
 l2 = L2_simplified(4)
 l3 = L3_simplified(4)

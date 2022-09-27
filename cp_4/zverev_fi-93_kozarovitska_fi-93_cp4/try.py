@@ -93,9 +93,9 @@ l2 = L2_simplified(4)
 l3 = L3_simplified(4)
 key1 = [1,0,1]
 l1.set_key(key1)
-key2 = [1,0,1,1]
+key2 = [1,0,1,0]
 l2.set_key(key2)
-key3 = [1,1,0,1]
+key3 = [1,0,0,1]
 l3.set_key(key3)
 l1.generate_first(100)
 l2.generate_first(100)
