@@ -78,7 +78,7 @@ class L2_simplified(Generator):
 
 class L3_simplified(Generator):
     def generate(self):
-        new_x = self.key[-27] ^ self.key[-26]^self.key[-25]^self.key[-22]
+                new_x = self.key[-27] ^ self.key[-26]^self.key[-25]^self.key[-22]
         #new_x = self.key[-1] ^ self.key[-2]
         self.key.append(new_x)
         self.arr.append(self.key[0])
@@ -375,7 +375,8 @@ def find_L3_v2(generator, arr_cand_l1, arr_cand_l2, z):
 f = open('z')
 arr_z_t = list(f)
 z = [int(x) for x in arr_z_t[0]]
-alpha = 0.01start = time.time()
+alpha = 0.01
+start = time.time()
 l1 = L1_simplified(25)
 l1.get_n_C()
 arr_cand_l1 = count_R_L(l1, z, 1)
@@ -389,7 +390,6 @@ end =  time.time()
 print('Execution time:', time.strftime("%H:%M:%S", time.gmtime(end-start)))
 l3 = L3_simplified(27)
 find_L3_v2(l3, arr_cand_l1, arr_cand_l2, z)
-
 
 # key = [1,2,3,4]
 # arr_gen  =[]
